@@ -1,7 +1,5 @@
 package org.tguduru.lucene.rest.resource;
 
-import com.cerner.message.center.referral.directory.model.Provider;
-
 import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -15,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tguduru.lucene.rest.config.LuceneIndexConfig;
 import org.tguduru.lucene.rest.index.ReadIndex;
 import org.tguduru.lucene.rest.index.SingletonIndexWriter;
+import org.tguduru.lucene.rest.model.Product;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -32,7 +30,7 @@ public class ProductSearchResource {
     private LuceneIndexConfig luceneIndexConfig;
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public List<Provider> search(@RequestParam(value = "query") String searchQuery) throws IOException, ParseException {
+    public List<Product> search(@RequestParam(value = "query") String searchQuery) throws IOException, ParseException {
         searchQuery = searchQuery.toLowerCase();
 
         final ReadIndex readIndex = new ReadIndex(luceneIndexConfig);
@@ -44,10 +42,11 @@ public class ProductSearchResource {
         return "Started REST Container";
     }
 
-    @RequestMapping(value = "/status",method =  RequestMethod.GET)
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
     public String getIndexStatus() throws IOException {
         final IndexWriter indexWriter = SingletonIndexWriter.getInstance(luceneIndexConfig).getIndexWriter();
-        final Path path = FileSystems.getDefault().getPath(luceneIndexConfig.getDirectory(), luceneIndexConfig.getName());
+        final Path path = FileSystems.getDefault().getPath(luceneIndexConfig.getDirectory(),
+                luceneIndexConfig.getName());
         final Directory directory = new MMapDirectory(path);
         final CheckIndex checkIndex = new CheckIndex(directory);
         final CheckIndex.Status status = checkIndex.checkIndex();

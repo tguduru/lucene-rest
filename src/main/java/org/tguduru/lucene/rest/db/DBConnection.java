@@ -1,6 +1,8 @@
 package org.tguduru.lucene.rest.db;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.tguduru.lucene.rest.config.CommandLineConfig;
+import org.tguduru.lucene.rest.config.ConfigParameters;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,9 +17,9 @@ public class DBConnection {
         System.out.println("Starting to connect to DB... - " + new Date());
         final BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:v500/v500@ipldb02.northamerica.cerner.net:1521:prov1");
-        dataSource.setUsername("v500");
-        dataSource.setPassword("v500");
+        dataSource.setUrl(CommandLineConfig.getConfig(ConfigParameters.dbUrl));
+        dataSource.setUsername(CommandLineConfig.getConfig(ConfigParameters.dbUserName));
+        dataSource.setPassword(CommandLineConfig.getConfig(ConfigParameters.dbPassword));
         final Connection connection = dataSource.getConnection();
         System.out.println("Connected ... ");
         return connection;

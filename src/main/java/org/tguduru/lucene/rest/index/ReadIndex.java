@@ -1,6 +1,5 @@
 package org.tguduru.lucene.rest.index;
 
-import com.cerner.message.center.referral.directory.model.Provider;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
@@ -8,8 +7,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.*;
-import org.apache.lucene.util.Version;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.WildcardQuery;
 import org.tguduru.lucene.rest.config.LuceneIndexConfig;
 import org.tguduru.lucene.rest.model.Product;
 
@@ -57,8 +61,8 @@ public class ReadIndex {
         return products;
     }
 
-    public List<Provider> searchProviders(final String searchString) throws ParseException, IOException {
-        final List<Provider> providers = Lists.newArrayList();
+    public List<Product> searchProviders(final String searchString) throws ParseException, IOException {
+        final List<Product> products = Lists.newArrayList();
         final Analyzer standardAnalyzer = new WhitespaceAnalyzer();
         final BooleanQuery booleanQueryBuilder = new BooleanQuery();
         final Query query = new QueryParser( "firstName", standardAnalyzer).parse(searchString);
@@ -68,10 +72,12 @@ public class ReadIndex {
         for (final ScoreDoc doc : resultDocs) {
             final Document document = indexSearcher.doc(doc.doc);
             final String name = document.get("firstName");
-            final Provider provider = Provider.newBuilder().withFirstName(name).build();
-            providers.add(provider);
+            final long id = Long.parseLong(document.get("id"));
+            final String lastName = document.get("lastName");
+            final String fullName = document.get("fullName");
+            //add it to products
         }
 
-        return providers;
+        return products;
     }
 }

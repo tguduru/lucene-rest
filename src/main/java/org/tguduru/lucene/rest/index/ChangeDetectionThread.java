@@ -2,14 +2,12 @@ package org.tguduru.lucene.rest.index;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.MMapDirectory;
-import org.apache.lucene.store.NIOFSDirectory;
 import org.tguduru.lucene.rest.config.DBPollingInterval;
 import org.tguduru.lucene.rest.config.DataSourceProperties;
 import org.tguduru.lucene.rest.config.LuceneIndexConfig;
 import org.tguduru.lucene.rest.model.Product;
 import org.tguduru.lucene.rest.util.Config;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -28,8 +26,8 @@ public class ChangeDetectionThread implements Runnable {
     private final DataSourceProperties dataSourceProperties;
     private final LuceneIndexConfig luceneIndexConfig;
 
-    public ChangeDetectionThread(final DBPollingInterval dbPollingInterval, final DataSourceProperties dataSourceProperties,
-                                 final LuceneIndexConfig luceneIndexConfig) {
+    public ChangeDetectionThread(final DBPollingInterval dbPollingInterval,
+            final DataSourceProperties dataSourceProperties, final LuceneIndexConfig luceneIndexConfig) {
         this.dbPollingInterval = dbPollingInterval;
         this.dataSourceProperties = dataSourceProperties;
         this.luceneIndexConfig = luceneIndexConfig;
@@ -49,7 +47,8 @@ public class ChangeDetectionThread implements Runnable {
                 // update lastUpdateDateTime to a file
                 if (!products.isEmpty()) {
                     // write index
-                    final Path path = FileSystems.getDefault().getPath(luceneIndexConfig.getDirectory(), luceneIndexConfig.getName());
+                    final Path path = FileSystems.getDefault().getPath(luceneIndexConfig.getDirectory(),
+                            luceneIndexConfig.getName());
                     Directory directory = null;
                     try {
                         directory = new MMapDirectory(path);

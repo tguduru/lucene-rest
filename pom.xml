@@ -85,12 +85,13 @@
             <version>2.2</version>
         </dependency>
 
-
+        <!-- RxJava dependencies -->
         <dependency>
-            <groupId>com.cerner.message.center.referral.directory</groupId>
-            <artifactId>referral-directory-search</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.github.davidmoten</groupId>
+            <artifactId>rxjava-jdbc</artifactId>
+            <version>0.7</version>
         </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -134,17 +135,7 @@
         </plugins>
     </build>
     <repositories>
-        <repository>
-            <releases>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-            <id>external</id>
-            <name>Cerner External Repository</name>
-            <url>http://repo.release.cerner.corp/external/repo/</url>
-        </repository>
+      
     </repositories>
 
 

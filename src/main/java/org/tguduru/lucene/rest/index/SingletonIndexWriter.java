@@ -8,6 +8,8 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.TieredMergePolicy;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.MMapDirectory;
+import org.tguduru.lucene.rest.config.CommandLineConfig;
+import org.tguduru.lucene.rest.config.ConfigParameters;
 import org.tguduru.lucene.rest.config.LuceneIndexConfig;
 
 import java.io.IOException;
@@ -34,12 +36,11 @@ public class SingletonIndexWriter {
         indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
         indexWriterConfig.setMergePolicy(new TieredMergePolicy()); // merge policy
         indexWriterConfig.setMergeScheduler(new ConcurrentMergeScheduler()); // merge scheduler
-        indexWriterConfig.setRAMBufferSizeMB(128);// which is Lucene sweet spot for RAM buffer.
+        indexWriterConfig.setRAMBufferSizeMB(64);// which is Lucene sweet spot for RAM buffer.
         indexWriterConfig.setUseCompoundFile(false);
         indexWriterConfig.setMaxBufferedDeleteTerms(1);
         try {
-            final Path path = FileSystems.getDefault().getPath(luceneIndexConfig.getDirectory(),
-                    luceneIndexConfig.getName());
+            final Path path = FileSystems.getDefault().getPath(CommandLineConfig.getConfig(ConfigParameters.indexLocation));
             final Directory directory = new MMapDirectory(path);
             indexWriter = new IndexWriter(directory, indexWriterConfig);
         } catch (IOException e) {
